@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Currículo</title>
+</head>
+<body>
+    <h1>Cadastro de Currículo</h1>
+    <form action="/curriculos" method="post">
+        <label>Nome: <input type="text" name="nome" required></label><br>
+        <label>Telefone: <input type="text" name="telefone"></label><br>
+        <label>Email: <input type="email" name="email" required></label><br>
+        <label>Endereço WEB: <input type="url" name="endereco_web"></label><br>
+        <label>Experiência Profissional: <textarea name="experiencia_profissional" required></textarea></label><br>
+        <button type="submit">Salvar</button>
+    </form>
+</body>
+</html>

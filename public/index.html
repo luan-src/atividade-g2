@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currículos</title>
+</head>
+<body>
+    <h1>Lista de Currículos</h1>
+    <ul id="lista-curriculos"></ul>
+
+    <script>
+        fetch('/curriculos')
+            .then(res => res.json())
+            .then(data => {
+                const lista = document.getElementById('lista-curriculos');
+                data.forEach(curriculo => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="/consulta.html?id=${curriculo.id}">${curriculo.nome} (${curriculo.email})</a>`;
+                    lista.appendChild(li);
+                });
+            });
+    </script>
+</body>
+</html>

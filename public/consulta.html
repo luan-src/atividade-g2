@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Currículo</title>
+</head>
+<body>
+    <h1>Consulta de Currículo</h1>
+    <div id="dados-curriculo"></div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+
+        fetch(`/curriculos/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                const div = document.getElementById('dados-curriculo');
+                div.innerHTML = `
+                    <p><strong>Nome:</strong> ${data.nome}</p>
+                    <p><strong>Telefone:</strong> ${data.telefone || 'Não informado'}</p>
+                    <p><strong>Email:</strong> ${data.email}</p>
+                    <p><strong>Endereço WEB:</strong> ${data.endereco_web || 'Não informado'}</p>
+                    <p><strong>Experiência Profissional:</strong> ${data.experiencia_profissional}</p>
+                `;
+            });
+    </script>
+</body>
+</html>
