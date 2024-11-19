@@ -4,27 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consulta de Currículo</title>
+    <style>
+        /* Centralizar o conteúdo */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Estilizar o título */
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        /* Estilizar o mecanismo de busca */
+        #search-container {
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 50px);
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 50px;
+            padding: 10px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Estilizar os resultados */
+        #dados-curriculo {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: left;
+        }
+
+        p {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        strong {
+            color: #333;
+        }
+    </style>
 </head>
 <body>
     <h1>Consulta de Currículo</h1>
-    <div id="dados-curriculo"></div>
+
+    <!-- Mecanismo de busca -->
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Digite o nome do currículo">
+        <button id="search-button">🔍</button>
+    </div>
+
+    <!-- Exibição dos dados do currículo -->
+    <div id="dados-curriculo">Digite o nome no campo acima para buscar um currículo.</div>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const id = params.get('id');
+        // Referências aos elementos
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const dadosCurriculoDiv = document.getElementById('dados-curriculo');
 
-        fetch(`/curriculos/${id}`)
-            .then(res => res.json())
-            .then(data => {
-                const div = document.getElementById('dados-curriculo');
-                div.innerHTML = `
-                    <p><strong>Nome:</strong> ${data.nome}</p>
-                    <p><strong>Telefone:</strong> ${data.telefone || 'Não informado'}</p>
-                    <p><strong>Email:</strong> ${data.email}</p>
-                    <p><strong>Endereço WEB:</strong> ${data.endereco_web || 'Não informado'}</p>
-                    <p><strong>Experiência Profissional:</strong> ${data.experiencia_profissional}</p>
-                `;
-            });
+        // Mecanismo de busca
+        searchButton.addEventListener('click', () => {
+            const nome = searchInput.value.trim();
+            if (!nome) {
+                dadosCurriculoDiv.innerHTML = "<p>Por favor, digite um nome para buscar.</p>";
+                return;
+            }
+
+            fetch(`/curriculos?nome=${encodeURIComponent(nome)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        dadosCurriculoDiv.innerHTML = "<p>Nenhum currículo encontrado com esse nome.</p>";
+                    } else {
+                        const curriculo = data[0]; // Assume que pega o primeiro resultado
+                        dadosCurriculoDiv.innerHTML = `
+                            <p><strong>Nome:</strong> ${curriculo.nome}</p>
+                            <p><strong>Telefone:</strong> ${curriculo.telefone || 'Não informado'}</p>
+                            <p><strong>Email:</strong> ${curriculo.email}</p>
+                            <p><strong>Endereço WEB:</strong> ${curriculo.endereco_web || 'Não informado'}</p>
+                            <p><strong>Experiência Profissional:</strong> ${curriculo.experiencia_profissional}</p>
+                        `;
+                    }
+                })
+                .catch(() => {
+                    dadosCurriculoDiv.innerHTML = "<p>Erro ao buscar o currículo. Tente novamente mais tarde.</p>";
+                });
+        });
     </script>
 </body>
 </html>

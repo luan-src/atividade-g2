@@ -1,25 +1,142 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currículos</title>
-</head>
-<body>
-    <h1>Lista de Currículos</h1>
-    <ul id="lista-curriculos"></ul>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Currículos</title>
+        </head>
+        <body>
+            <h1>Lista de Currículos</h1>
+            <ul id="lista-curriculos"></ul>
+            <div>
+                <button class="glow-on-hover" onclick="location.href='cadastro.html'">Cadastrar Currículo</button>
+                <button class="glow-on-hover" onclick="location.href='consulta.html'">Consultar Currículos</button>
+            </div>
+            <script>
+                fetch('/curriculos')
+                    .then(res => res.json())
+                    .then(data => {
+                        const lista = document.getElementById('lista-curriculos');
+                        data.forEach(curriculo => {
+                            const li = document.createElement('li');
+                            li.innerHTML = `<a href="/consulta.html?id=${curriculo.id}">${curriculo.nome} (${curriculo.email})</a>`;
+                            lista.appendChild(li);
+                        });
+                    });
+            </script>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100vh;
+                    margin: 0;
+                    background-color: #f9f9f9;
+                }
+                h1 {
+                    margin-bottom: 20px;
+                    font-size: 2rem;
+                    color: #333;
+                }
+                ul {
+                    list-style-type: none;
+                    padding: 0;
+                    width: 80%;
+                    max-width: 600px;
+                }
+                li {
+                    margin-bottom: 10px;
+                    background-color: #ffffff;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                    padding: 10px;
+                    text-align: center;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                }
+                a {
+                    text-decoration: none;
+                    color: #007BFF;
+                    font-weight: bold;
+                }
+                a:hover {
+                    color: #0056b3;
+                    text-decoration: underline;
+                }
+                button {
+                    margin-top: 20px;
+                    padding: 10px 20px;
+                    font-size: 1rem;
+                    color: #fff;
+                    background-color: #ffa600;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                }
+                button:hover {
+                    background-color: #0056b3;
+                }
+                .glow-on-hover {
+                    width: 220px;
+                    height: 50px;
+                    border: none;
+                    outline: none;
+                    color: #fff;
+                    background: #111;
+                    cursor: pointer;
+                    position: relative;
+                    z-index: 0;
+                    border-radius: 10px;
+                }
 
-    <script>
-        fetch('/curriculos')
-            .then(res => res.json())
-            .then(data => {
-                const lista = document.getElementById('lista-curriculos');
-                data.forEach(curriculo => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<a href="/consulta.html?id=${curriculo.id}">${curriculo.nome} (${curriculo.email})</a>`;
-                    lista.appendChild(li);
-                });
-            });
-    </script>
-</body>
+                .glow-on-hover:before {
+                    content: '';
+                    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+                    position: absolute;
+                    top: -2px;
+                    left:-2px;
+                    background-size: 400%;
+                    z-index: -1;
+                    filter: blur(5px);
+                    width: calc(100% + 4px);
+                    height: calc(100% + 4px);
+                    animation: glowing 20s linear infinite;
+                    opacity: 0;
+                    transition: opacity .3s ease-in-out;
+                    border-radius: 10px;
+                }
+
+                .glow-on-hover:active {
+                    color: #000
+                }
+
+                .glow-on-hover:active:after {
+                    background: transparent;
+                }
+
+                .glow-on-hover:hover:before {
+                    opacity: 1;
+                }
+
+                .glow-on-hover:after {
+                    z-index: -1;
+                    content: '';
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    background: #111;
+                    left: 0;
+                    top: 0;
+                    border-radius: 10px;
+                }
+
+                @keyframes glowing {
+                    0% { background-position: 0 0; }
+                    50% { background-position: 400% 0; }
+                    100% { background-position: 0 0; }
+                }
+            </style>
+    </body>
 </html>
